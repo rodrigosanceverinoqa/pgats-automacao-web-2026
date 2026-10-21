@@ -1,0 +1,14 @@
+node_modules/
+log/
+results/
+
+# Cypress
+cypress/screenshots/
+cypress/videos/
+cypress/reports/
+
+# Variáveis de ambiente
+.env
+
+npm_install_debug.log
+.DS_Store
