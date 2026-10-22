@@ -186,7 +186,7 @@ describe('Automation Exercises 2', () => {
 
         cy.get('[data-qa="login-button"]').click();
 
-        cy.get(':nth-child(10) > a').should('contain.text', ' Logged in as PGATS');
+        cy.get(':nth-child(10) > a').should('contain.text', ' Logged in as Auth PGATS');
 
         cy.get('a > img').should('be.visible');
 
@@ -195,7 +195,7 @@ describe('Automation Exercises 2', () => {
         cy.get('.login-form > h2').should('contain.text', 'Login to your account');
     });
 
-    it('Cadastrar um usuário com e-mail existente', () => {
+    it.only('Cadastrar um usuário com e-mail existente', () => {
 
         cy.visit('https://automationexercise.com/');
 

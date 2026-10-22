@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-//require('cypress-xpath');
+require('cypress-xpath');
 
 describe('Automation Exercises 2', {
     // Evita que anuncios de terceiros interfiram na navegacao dos testes.
