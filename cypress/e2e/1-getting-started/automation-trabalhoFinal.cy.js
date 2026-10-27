@@ -1,22 +1,27 @@
 /// <reference types="cypress" />
 
+import { loginPage } from '../../modules/login';
 
-describe('Automation Exercises 2', () => {
+
+describe('Testes e validações - Automation Exercises', () => {
     it('Cadastrar um novo usuário', () => {
 
-        cy.visit('https://automationexercise.com/');
+        cy.visit('/');
 
         cy.get('a > img').should('be.visible');
 
-        cy.get('a[href*=login]').click();
+        loginPage.acessarPeloMenu();
 
         cy.get('.signup-form > h2').should('contain.text', 'New User Signup!');
 
         cy.get('[data-qa="signup-name"]').type('Fulano da Silva');
 
-        cy.get('[data-qa="signup-email"]').type(`pgats-aut-+${Date.now()}@gmail.com`);
+        cy.get('[data-qa="signup-email"]').type(`pgats-aut-${Date.now()}@gmail.com`);
 
         cy.get('[data-qa="signup-button"]').click();
+
+        cy.location('pathname').should('eq', '/signup');
+        cy.contains('b', 'Enter Account Information').should('be.visible');
 
         cy.get('#id_gender1').check();
 
@@ -54,11 +59,13 @@ describe('Automation Exercises 2', () => {
 
         cy.get('[data-qa="create-account"]').click();
 
-        cy.get('.title > b').should('contain.text', 'Account Created!');
+        cy.get('[data-qa="account-created"]', { timeout: 15000 })
+            .should('be.visible')
+            .and('contain.text', 'Account Created!');
 
         cy.get('[data-qa="continue-button"]').click();
 
-        cy.get(':nth-child(10) > a').should('contain.text', ' Logged in as Fulano da Silva');
+        cy.contains('.shop-menu a', 'Logged in as Fulano da Silva', { timeout: 15000 }).should('be.visible');
 
         cy.get('a[href="/delete_account"]').click();
 
@@ -72,11 +79,11 @@ describe('Automation Exercises 2', () => {
         const email = `pgats-aut-${Date.now()}@gmail.com`;
         const password = '1234567';
 
-        cy.visit('https://automationexercise.com/');
+        cy.visit('/');
 
         cy.get('a > img').should('be.visible');
 
-        cy.get('a[href*=login]').click();
+        loginPage.acessarPeloMenu();
 
         cy.get('[data-qa="signup-name"]').type('Fulano da Silva');
 
@@ -120,26 +127,29 @@ describe('Automation Exercises 2', () => {
 
         cy.get('[data-qa="create-account"]').click();
 
-        cy.get('.title > b').should('contain.text', 'Account Created!');
+        cy.get('[data-qa="account-created"]', { timeout: 15000 })
+            .should('be.visible')
+            .and('contain.text', 'Account Created!');
 
         cy.get('[data-qa="continue-button"]').click();
 
-        cy.get('a[href*=logout]').click();
+        cy.contains('.shop-menu a', 'Logged in as Fulano da Silva', { timeout: 15000 })
+            .should('be.visible');
+
+        loginPage.sair();
 
 
         // realizar o login do usuário com e-mail e senha corretos
 
-        //cy.get('a[href*=login]').click();
+        loginPage.titulo.should('contain.text', 'Login to your account');
 
-        cy.get('.login-form > h2').should('contain.text', 'Login to your account');
+        loginPage.preencherEmail(email);
 
-        cy.get('[data-qa="login-email"]').type(email);
+        loginPage.preencherSenha(password);
 
-        cy.get('[data-qa="login-password"]').type(password);
+        loginPage.entrar();
 
-        cy.get('[data-qa="login-button"]').click();
-
-        cy.get(':nth-child(10) > a').should('contain.text', ' Logged in as Fulano da Silva');
+        cy.contains('.shop-menu a', 'Logged in as Fulano da Silva', { timeout: 15000 }).should('be.visible');
 
         cy.get('a[href="/delete_account"]').click();
 
@@ -149,21 +159,21 @@ describe('Automation Exercises 2', () => {
 
     it('Login do usuário com e-mail e senha incorretos', () => {
 
-        cy.visit('https://automationexercise.com/');
+        cy.visit('/');
 
         cy.get('a > img').should('be.visible');
 
-        cy.get('a[href*=login]').click();
+        loginPage.acessarPeloMenu();
 
-        cy.get('.login-form > h2').should('contain.text', 'Login to your account');
+        loginPage.titulo.should('contain.text', 'Login to your account');
 
-        cy.get('[data-qa="login-email"]').type('pgats@gmail.com');
+        loginPage.preencherEmail('pgats@gmail.com');
 
-        cy.get('[data-qa="login-password"]').type('wrongpassword');
+        loginPage.preencherSenha('wrongpassword');
 
-        cy.get('[data-qa="login-button"]').click();
+        loginPage.entrar();
 
-        cy.get('.login-form > form > p').should('contain.text', 'Your email or password is incorrect!');
+        loginPage.mensagemDeErro.should('contain.text', 'Your email or password is incorrect!');
 
     });
 
@@ -172,36 +182,36 @@ describe('Automation Exercises 2', () => {
         const email = 'aut-pgats-008@test.com';
         const password = '1234567';
 
-        cy.visit('https://automationexercise.com/');
+        cy.visit('/');
 
         cy.get('a > img').should('be.visible');
 
-        cy.get('a[href*=login]').click();
+        loginPage.acessarPeloMenu();
 
-        cy.get('.login-form > h2').should('contain.text', 'Login to your account');
+        loginPage.titulo.should('contain.text', 'Login to your account');
 
-        cy.get('[data-qa="login-email"]').type(email);
+        loginPage.preencherEmail(email);
 
-        cy.get('[data-qa="login-password"]').type(password);
+        loginPage.preencherSenha(password);
 
-        cy.get('[data-qa="login-button"]').click();
+        loginPage.entrar();
 
-        cy.get(':nth-child(10) > a').should('contain.text', ' Logged in as Auth PGATS');
+        cy.contains('.shop-menu a', 'Logged in as Auth PGATS', { timeout: 15000 }).should('be.visible');
 
         cy.get('a > img').should('be.visible');
 
-        cy.get('a[href*=logout]').click();
+        loginPage.sair();
 
-        cy.get('.login-form > h2').should('contain.text', 'Login to your account');
+        loginPage.titulo.should('contain.text', 'Login to your account');
     });
 
     it('Cadastrar um usuário com e-mail existente', () => {
 
-        cy.visit('https://automationexercise.com/');
+        cy.visit('/');
 
         cy.get('a > img').should('be.visible');
 
-        cy.get('a[href*=login]').click();
+        loginPage.acessarPeloMenu();
 
         cy.get('.signup-form > h2').should('contain.text', 'New User Signup!');
 
@@ -216,7 +226,7 @@ describe('Automation Exercises 2', () => {
     });
 
     it('Verificar todos os produtos e a página de detalhes do produto', () => {
-        cy.visit('https://automationexercise.com/');
+        cy.visit('/');
 
         cy.get('a > img').should('be.visible');
 
@@ -260,7 +270,7 @@ describe('Automation Exercises 2', () => {
 
     it('Pesquisar produto', () => {
 
-        cy.visit('https://automationexercise.com/');
+        cy.visit('/');
 
         cy.get('a > img').should('be.visible');
 
@@ -286,7 +296,7 @@ describe('Automation Exercises 2', () => {
 
     it('Verificar assinatura na página inicial', () => {
 
-        cy.visit('https://automationexercise.com/');
+        cy.visit('/');
 
         cy.get('a > img').should('be.visible');
 
@@ -309,11 +319,11 @@ describe('Automation Exercises 2', () => {
 
     it('Fazer pedido: Registrar-se antes de finalizar a compra', () => {
 
-        cy.visit('https://automationexercise.com/');
+        cy.visit('/');
 
         cy.get('a > img').should('be.visible');
 
-        cy.get('a[href*=login]').click();
+        loginPage.acessarPeloMenu();
 
         cy.get('.signup-form > h2').should('contain.text', 'New User Signup!');
 
@@ -359,15 +369,17 @@ describe('Automation Exercises 2', () => {
 
         cy.get('[data-qa="create-account"]').click();
 
-        cy.get('.title > b').should('contain.text', 'Account Created!');
+        cy.get('[data-qa="account-created"]', { timeout: 15000 }).should('be.visible').and('contain.text', 'Account Created!');
 
         cy.get('[data-qa="continue-button"]').click();
 
-        cy.get(':nth-child(10) > a').should('contain.text', ' Logged in as Cyclano da Silva');
+        cy.contains('.shop-menu a', 'Logged in as Cyclano da Silva', { timeout: 15000 }).should('be.visible');
 
         cy.get('a[href="/products"]').should('have.length', 1).click();
 
-        cy.contains('h2.title', 'All Products').should('be.visible');
+        cy.location('pathname', { timeout: 15000 }).should('eq', '/products');
+
+        cy.contains('h2.title', 'All Products', { timeout: 15000 }).should('be.visible');
 
         cy.get('.features_items').should('be.visible');
 
@@ -396,9 +408,9 @@ describe('Automation Exercises 2', () => {
 
         cy.contains('a', 'Proceed To Checkout').should('be.visible').click();
 
-        cy.location('pathname').should('eq', '/checkout');
+        cy.location('pathname', { timeout: 15000 }).should('eq', '/checkout');
 
-        cy.contains('h2', 'Address Details').should('be.visible');
+        cy.contains('h2', 'Address Details', { timeout: 15000 }).should('be.visible');
 
         cy.get('#address_delivery, #address_invoice').each(($endereco) => {
             cy.wrap($endereco)
@@ -441,7 +453,8 @@ describe('Automation Exercises 2', () => {
 
         cy.get('[data-qa="pay-button"]').should('be.visible').click();
 
-        cy.contains('p', 'Congratulations! Your order has been confirmed!').should('be.visible');
+        cy.contains('p', 'Congratulations! Your order has been confirmed!', { timeout: 15000 })
+            .should('be.visible');
 
         cy.get('a[href="/delete_account"]').click();
 
@@ -451,23 +464,23 @@ describe('Automation Exercises 2', () => {
 
     });
 
-    it('Fazer pedido: Faça login antes de finalizar a compra', () => {
+    it.only('Fazer pedido: Faça login antes de finalizar a compra', () => {
 
-        cy.visit('https://automationexercise.com/');
+        cy.visit('/');
 
         cy.get('a > img').should('be.visible');
 
-        cy.get('a[href*=login]').click();
+        loginPage.acessarPeloMenu();
 
-        cy.get('.login-form > h2').should('contain.text', 'Login to your account');
+        loginPage.titulo.should('contain.text', 'Login to your account');
 
-        cy.get('[data-qa="login-email"]').type('aut-pgats-008@test.com');
+        loginPage.preencherEmail('aut-pgats-008@test.com');
 
-        cy.get('[data-qa="login-password"]').type('1234567');
+        loginPage.preencherSenha('1234567');
 
-        cy.get('[data-qa="login-button"]').click();
+        loginPage.entrar();
 
-        cy.get(':nth-child(10) > a').should('contain.text', ' Logged in as Auth PGATS');
+        cy.contains('.shop-menu a', 'Logged in as Auth PGATS', { timeout: 15000 }).should('be.visible');
 
         cy.get('a[href="/products"]').should('have.length', 1).click();
 
@@ -500,9 +513,9 @@ describe('Automation Exercises 2', () => {
 
         cy.contains('a', 'Proceed To Checkout').should('be.visible').click();
 
-        cy.location('pathname').should('eq', '/checkout');
+        cy.location('pathname', { timeout: 15000 }).should('eq', '/checkout');
 
-        cy.contains('h2', 'Address Details').should('be.visible');
+        cy.contains('h2', 'Address Details', { timeout: 15000 }).should('be.visible');
 
         cy.get('#address_delivery, #address_invoice').each(($endereco) => {
             cy.wrap($endereco)
@@ -544,7 +557,8 @@ describe('Automation Exercises 2', () => {
 
         cy.get('[data-qa="pay-button"]').should('be.visible').click();
 
-        cy.contains('p', 'Congratulations! Your order has been confirmed!').should('be.visible');
+        cy.contains('p', 'Congratulations! Your order has been confirmed!', { timeout: 15000 })
+            .should('be.visible');
 
     });
 
