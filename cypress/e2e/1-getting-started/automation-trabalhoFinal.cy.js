@@ -373,12 +373,8 @@ describe('Testes e validações - Automation Exercises', () => {
 
         carrinhoPage.fazerPedido();
 
-        pagamentoPage.preencherDados({
-            nomeNoCartao: 'Cyclano da Silva',
-            numero: '4111111111111111',
-            cvc: '123',
-            mesValidade: '12',
-            anoValidade: '2030'
+        cy.fixture('pagamento').then((dadosPagamento) => {
+            pagamentoPage.preencherDados(dadosPagamento);
         });
 
         pagamentoPage.pagarEConfirmarPedido();
@@ -463,12 +459,8 @@ describe('Testes e validações - Automation Exercises', () => {
 
         carrinhoPage.fazerPedido();
 
-        pagamentoPage.preencherDados({
-            nomeNoCartao: 'Cyclano da Silva',
-            numero: '4111111111111111',
-            cvc: '123',
-            mesValidade: '12',
-            anoValidade: '2030'
+        cy.fixture('pagamento').then((dadosPagamento) => {
+            pagamentoPage.preencherDados(dadosPagamento);
         });
 
         pagamentoPage.pagarEConfirmarPedido();
