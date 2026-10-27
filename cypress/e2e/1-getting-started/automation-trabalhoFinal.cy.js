@@ -3,6 +3,7 @@
 import { loginPage } from '../../modules/login';
 import { cadastroPage } from '../../modules/cadastro';
 import { produtosPage } from '../../modules/produtos';
+import { carrinhoPage } from '../../modules/carrinho';
 
 
 describe('Testes e validações - Automation Exercises', () => {
@@ -335,18 +336,14 @@ describe('Testes e validações - Automation Exercises', () => {
             produtosPage.continuarComprando();
         }
 
-        cy.get('.shop-menu a[href="/view_cart"]').should('have.length', 1).click();
+        carrinhoPage.acessarPeloMenu();
+        carrinhoPage.conteudo.should('be.visible');
 
-        cy.location('pathname', { timeout: 15000 }).should('eq', '/view_cart');
-        cy.get('#cart_items', { timeout: 15000 }).should('be.visible');
+        carrinhoPage.prosseguirParaCheckout();
 
-        cy.contains('a', 'Proceed To Checkout').should('be.visible').click();
+        carrinhoPage.tituloEnderecos.should('be.visible');
 
-        cy.location('pathname', { timeout: 15000 }).should('eq', '/checkout');
-
-        cy.contains('h2', 'Address Details', { timeout: 15000 }).should('be.visible');
-
-        cy.get('#address_delivery, #address_invoice').each(($endereco) => {
+        carrinhoPage.enderecos.each(($endereco) => {
             cy.wrap($endereco)
                 .should('be.visible')
                 .and('contain.text', 'Cyclano da Silva')
@@ -359,9 +356,9 @@ describe('Testes e validações - Automation Exercises', () => {
                 .and('contain.text', '+1 1234567890');
         });
 
-        cy.contains('h2', 'Review Your Order').should('be.visible');
+        carrinhoPage.tituloRevisao.should('be.visible');
 
-        cy.get('#cart_info tbody tr[id^="product-"]').should('have.length', 3)
+        carrinhoPage.produtos.should('have.length', 3)
             .each(($produto) => {
                 cy.wrap($produto).within(() => {
                     cy.get('.cart_description a').should('be.visible');
@@ -371,9 +368,9 @@ describe('Testes e validações - Automation Exercises', () => {
                 });
             });
 
-        cy.get('textarea[name="message"]').should('be.visible').type('Por favor, entregar o pedido em horário comercial.');
+        carrinhoPage.preencherComentario('Por favor, entregar o pedido em horário comercial.');
 
-        cy.contains('a', 'Place Order').should('be.visible').click();
+        carrinhoPage.fazerPedido();
 
         cy.get('[data-qa="name-on-card"]').type('Cyclano da Silva');
 
@@ -432,18 +429,14 @@ describe('Testes e validações - Automation Exercises', () => {
             produtosPage.continuarComprando();
         }
 
-        cy.get('.shop-menu a[href="/view_cart"]').should('have.length', 1).click();
+        carrinhoPage.acessarPeloMenu();
+        carrinhoPage.conteudo.should('be.visible');
 
-        cy.location('pathname', { timeout: 15000 }).should('eq', '/view_cart');
-        cy.get('#cart_items', { timeout: 15000 }).should('be.visible');
+        carrinhoPage.prosseguirParaCheckout();
 
-        cy.contains('a', 'Proceed To Checkout').should('be.visible').click();
+        carrinhoPage.tituloEnderecos.should('be.visible');
 
-        cy.location('pathname', { timeout: 15000 }).should('eq', '/checkout');
-
-        cy.contains('h2', 'Address Details', { timeout: 15000 }).should('be.visible');
-
-        cy.get('#address_delivery, #address_invoice').each(($endereco) => {
+        carrinhoPage.enderecos.each(($endereco) => {
             cy.wrap($endereco)
                 .should('be.visible')
                 .and('contain.text', 'Cyclano da Silva')
@@ -456,9 +449,9 @@ describe('Testes e validações - Automation Exercises', () => {
                 .and('contain.text', '+1 1234567890');
         });
 
-        cy.contains('h2', 'Review Your Order').should('be.visible');
+        carrinhoPage.tituloRevisao.should('be.visible');
 
-        cy.get('#cart_info tbody tr[id^="product-"]').should('have.length', 3)
+        carrinhoPage.produtos.should('have.length', 3)
             .each(($produto) => {
                 cy.wrap($produto).within(() => {
                     cy.get('.cart_description a').should('be.visible');
@@ -467,9 +460,9 @@ describe('Testes e validações - Automation Exercises', () => {
                 });
             });
 
-        cy.get('textarea[name="message"]').should('be.visible').type('Por favor, entregar o pedido em horário comercial.');
+        carrinhoPage.preencherComentario('Por favor, entregar o pedido em horário comercial.');
 
-        cy.contains('a', 'Place Order').should('be.visible').click();
+        carrinhoPage.fazerPedido();
 
         cy.get('[data-qa="name-on-card"]').type('Cyclano da Silva');
 
