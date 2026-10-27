@@ -4,6 +4,7 @@ import { loginPage } from '../../modules/login';
 import { cadastroPage } from '../../modules/cadastro';
 import { produtosPage } from '../../modules/produtos';
 import { carrinhoPage } from '../../modules/carrinho';
+import { pagamentoPage } from '../../modules/pagamento';
 
 
 describe('Testes e validações - Automation Exercises', () => {
@@ -372,19 +373,17 @@ describe('Testes e validações - Automation Exercises', () => {
 
         carrinhoPage.fazerPedido();
 
-        cy.get('[data-qa="name-on-card"]').type('Cyclano da Silva');
+        pagamentoPage.preencherDados({
+            nomeNoCartao: 'Cyclano da Silva',
+            numero: '4111111111111111',
+            cvc: '123',
+            mesValidade: '12',
+            anoValidade: '2030'
+        });
 
-        cy.get('[data-qa="card-number"]').type('4111111111111111');
+        pagamentoPage.pagarEConfirmarPedido();
 
-        cy.get('[data-qa="cvc"]').type('123');
-
-        cy.get('[data-qa="expiry-month"]').type('12');
-
-        cy.get('[data-qa="expiry-year"]').type('2030');
-
-        cy.get('[data-qa="pay-button"]').should('be.visible').click();
-
-        cy.contains('p', 'Congratulations! Your order has been confirmed!', { timeout: 15000 })
+        pagamentoPage.mensagemConfirmacao
             .should('be.visible');
 
         cy.get('a[href="/delete_account"]').click();
@@ -464,19 +463,17 @@ describe('Testes e validações - Automation Exercises', () => {
 
         carrinhoPage.fazerPedido();
 
-        cy.get('[data-qa="name-on-card"]').type('Cyclano da Silva');
+        pagamentoPage.preencherDados({
+            nomeNoCartao: 'Cyclano da Silva',
+            numero: '4111111111111111',
+            cvc: '123',
+            mesValidade: '12',
+            anoValidade: '2030'
+        });
 
-        cy.get('[data-qa="card-number"]').type('4111111111111111');
+        pagamentoPage.pagarEConfirmarPedido();
 
-        cy.get('[data-qa="cvc"]').type('123');
-
-        cy.get('[data-qa="expiry-month"]').type('12');
-
-        cy.get('[data-qa="expiry-year"]').type('2030');
-
-        cy.get('[data-qa="pay-button"]').should('be.visible').click();
-
-        cy.contains('p', 'Congratulations! Your order has been confirmed!', { timeout: 15000 })
+        pagamentoPage.mensagemConfirmacao
             .should('be.visible');
 
     });
