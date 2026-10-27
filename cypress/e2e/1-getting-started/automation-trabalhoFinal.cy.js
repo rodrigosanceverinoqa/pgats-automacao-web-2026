@@ -2,6 +2,7 @@
 
 import { loginPage } from '../../modules/login';
 import { cadastroPage } from '../../modules/cadastro';
+import { produtosPage } from '../../modules/produtos';
 
 
 describe('Testes e validações - Automation Exercises', () => {
@@ -192,19 +193,17 @@ describe('Testes e validações - Automation Exercises', () => {
 
         cy.get('a > img').should('be.visible');
 
-        cy.get('a[href="/products"]').should('have.length', 1).click();
+        produtosPage.acessarPeloMenu();
 
-        cy.location('pathname', { timeout: 15000 }).should('eq', '/products');
+        produtosPage.titulo.should('be.visible');
 
-        cy.contains('h2.title', 'All Products', { timeout: 15000 }).should('be.visible');
+        produtosPage.lista.should('be.visible');
 
-        cy.get('.features_items').should('be.visible');
+        produtosPage.produtos.should('have.length.greaterThan', 0);
 
-        cy.get('.features_items .product-image-wrapper').should('have.length.greaterThan', 0);
+        produtosPage.abrirDetalhes(0);
 
-        cy.get('.features_items .product-image-wrapper').first().contains('a', 'View Product').click();
-
-        cy.get('.product-information').within(() => {
+        produtosPage.detalhes.within(() => {
 
             cy.get('h2')
                 .should('be.visible')
@@ -238,19 +237,15 @@ describe('Testes e validações - Automation Exercises', () => {
 
         cy.get('a > img').should('be.visible');
 
-        cy.get('a[href="/products"]').should('have.length', 1).click();
+        produtosPage.acessarPeloMenu();
 
-        cy.location('pathname', { timeout: 15000 }).should('eq', '/products');
+        produtosPage.titulo.should('be.visible');
 
-        cy.contains('h2.title', 'All Products', { timeout: 15000 }).should('be.visible');
+        produtosPage.pesquisar('Blue Top');
 
-        cy.get('#search_product').type('Blue Top');
+        produtosPage.tituloResultados.should('be.visible');
 
-        cy.get('#submit_search').click();
-
-        cy.contains('h2.title', 'Searched Products').should('be.visible');
-
-        cy.get('.features_items .product-image-wrapper').should('have.length.greaterThan', 0).each(($produto) => {
+        produtosPage.produtos.should('have.length.greaterThan', 0).each(($produto) => {
             cy.wrap($produto)
                 .should('be.visible')
                 .find('.productinfo p')
@@ -324,36 +319,26 @@ describe('Testes e validações - Automation Exercises', () => {
 
         cy.contains('.shop-menu a', 'Logged in as Cyclano da Silva', { timeout: 15000 }).should('be.visible');
 
-        cy.get('a[href="/products"]').should('have.length', 1).click();
+        produtosPage.acessarPeloMenu();
 
-        cy.location('pathname', { timeout: 15000 }).should('eq', '/products');
+        produtosPage.titulo.should('be.visible');
 
-        cy.contains('h2.title', 'All Products', { timeout: 15000 }).should('be.visible');
+        produtosPage.lista.should('be.visible');
 
-        cy.get('.features_items').should('be.visible');
+        produtosPage.produtos.should('have.length.greaterThan', 0);
 
-        cy.get('.features_items .product-image-wrapper').should('have.length.greaterThan', 0);
-
-        cy.get('.features_items .product-image-wrapper')
+        produtosPage.produtos
             .should('have.length.at.least', 3);
 
         for (let indice = 0; indice < 3; indice++) {
-            cy.get('.features_items .product-image-wrapper')
-                .eq(indice)
-                .find('.productinfo .add-to-cart')
-                .click();
-
-            cy.contains('button', 'Continue Shopping')
-                .should('be.visible')
-                .click();
-
-            cy.get('#cartModal').should('not.be.visible');
+            produtosPage.adicionarAoCarrinho(indice);
+            produtosPage.continuarComprando();
         }
 
         cy.get('.shop-menu a[href="/view_cart"]').should('have.length', 1).click();
 
-        cy.location('pathname').should('eq', '/view_cart');
-        cy.get('#cart_items').should('be.visible');
+        cy.location('pathname', { timeout: 15000 }).should('eq', '/view_cart');
+        cy.get('#cart_items', { timeout: 15000 }).should('be.visible');
 
         cy.contains('a', 'Proceed To Checkout').should('be.visible').click();
 
@@ -431,36 +416,26 @@ describe('Testes e validações - Automation Exercises', () => {
 
         cy.contains('.shop-menu a', 'Logged in as Auth PGATS', { timeout: 15000 }).should('be.visible');
 
-        cy.get('a[href="/products"]').should('have.length', 1).click();
+        produtosPage.acessarPeloMenu();
 
-        cy.location('pathname', { timeout: 15000 }).should('eq', '/products');
+        produtosPage.titulo.should('be.visible');
 
-        cy.contains('h2.title', 'All Products', { timeout: 15000 }).should('be.visible');
+        produtosPage.lista.should('be.visible');
 
-        cy.get('.features_items').should('be.visible');
+        produtosPage.produtos.should('have.length.greaterThan', 0);
 
-        cy.get('.features_items .product-image-wrapper').should('have.length.greaterThan', 0);
-
-        cy.get('.features_items .product-image-wrapper')
+        produtosPage.produtos
             .should('have.length.at.least', 3);
 
         for (let indice = 0; indice < 3; indice++) {
-            cy.get('.features_items .product-image-wrapper')
-                .eq(indice)
-                .find('.productinfo .add-to-cart')
-                .click();
-
-            cy.contains('button', 'Continue Shopping')
-                .should('be.visible')
-                .click();
-
-            cy.get('#cartModal').should('not.be.visible');
+            produtosPage.adicionarAoCarrinho(indice);
+            produtosPage.continuarComprando();
         }
 
         cy.get('.shop-menu a[href="/view_cart"]').should('have.length', 1).click();
 
-        cy.location('pathname').should('eq', '/view_cart');
-        cy.get('#cart_items').should('be.visible');
+        cy.location('pathname', { timeout: 15000 }).should('eq', '/view_cart');
+        cy.get('#cart_items', { timeout: 15000 }).should('be.visible');
 
         cy.contains('a', 'Proceed To Checkout').should('be.visible').click();
 
