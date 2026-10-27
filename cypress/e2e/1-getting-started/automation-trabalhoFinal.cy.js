@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
 import { loginPage } from '../../modules/login';
+import { cadastroPage } from '../../modules/cadastro';
 
 
 describe('Testes e validações - Automation Exercises', () => {
@@ -12,58 +13,40 @@ describe('Testes e validações - Automation Exercises', () => {
 
         loginPage.acessarPeloMenu();
 
-        cy.get('.signup-form > h2').should('contain.text', 'New User Signup!');
+        cadastroPage.titulo.should('contain.text', 'New User Signup!');
 
-        cy.get('[data-qa="signup-name"]').type('Fulano da Silva');
-
-        cy.get('[data-qa="signup-email"]').type(`pgats-aut-${Date.now()}@gmail.com`);
-
-        cy.get('[data-qa="signup-button"]').click();
+        cadastroPage.iniciarCadastro('Fulano da Silva', `pgats-aut-${Date.now()}@gmail.com`);
 
         cy.location('pathname').should('eq', '/signup');
-        cy.contains('b', 'Enter Account Information').should('be.visible');
 
-        cy.get('#id_gender1').check();
+        cadastroPage.tituloInformacoes.should('be.visible');
 
-        cy.get(':nth-child(1) > b').should('contain.text', 'Enter Account Information');
+        cadastroPage.preencherCadastro({
+            titulo: 'Mr',
+            senha: '1234567',
+            dia: '5',
+            mes: '7',
+            ano: '1977',
+            newsletter: true,
+            ofertas: true,
+            nome: 'Fulano',
+            sobrenome: 'da Silva',
+            empresa: 'Empresa de Fulano',
+            endereco: 'Rua dos Fulanos, 165',
+            pais: 'United States',
+            estado: 'California',
+            cidade: 'Los Angeles',
+            cep: '90001',
+            telefone: '+1 1234567890'
+        });
 
-        cy.get('[data-qa="password"]').type('1234567');
+        cadastroPage.criarConta();
 
-        cy.get('[data-qa="days"]').select('5');
-
-        cy.get('[data-qa="months"]').select('7');
-
-        cy.get('[data-qa="years"]').select('1977');
-
-        cy.get('#newsletter').check();
-
-        cy.get('#optin').check();
-
-        cy.get('[data-qa="first_name"]').type('Fulano');
-
-        cy.get('[data-qa="last_name"]').type('da Silva');
-
-        cy.get('[data-qa="company"]').type('Empresa de Fulano');
-
-        cy.get('[data-qa="address"]').type('Rua dos Fulanos, 165');
-
-        cy.get('[data-qa="country"]').select('United States');
-
-        cy.get('[data-qa="state"]').type('California');
-
-        cy.get('[data-qa="city"]').type('Los Angeles');
-
-        cy.get('[data-qa="zipcode"]').type('90001');
-
-        cy.get('[data-qa="mobile_number"]').type('+1 1234567890');
-
-        cy.get('[data-qa="create-account"]').click();
-
-        cy.get('[data-qa="account-created"]', { timeout: 15000 })
+        cadastroPage.mensagemContaCriada
             .should('be.visible')
             .and('contain.text', 'Account Created!');
 
-        cy.get('[data-qa="continue-button"]').click();
+        cadastroPage.continuar();
 
         cy.contains('.shop-menu a', 'Logged in as Fulano da Silva', { timeout: 15000 }).should('be.visible');
 
@@ -85,53 +68,36 @@ describe('Testes e validações - Automation Exercises', () => {
 
         loginPage.acessarPeloMenu();
 
-        cy.get('[data-qa="signup-name"]').type('Fulano da Silva');
+        cadastroPage.iniciarCadastro('Fulano da Silva', email);
 
-        cy.get('[data-qa="signup-email"]').type(email);
+        cadastroPage.tituloInformacoes.should('be.visible');
 
-        cy.get('[data-qa="signup-button"]').click();
+        cadastroPage.preencherCadastro({
+            titulo: 'Mr',
+            senha: password,
+            dia: '5',
+            mes: '7',
+            ano: '1977',
+            newsletter: true,
+            ofertas: true,
+            nome: 'Fulano',
+            sobrenome: 'da Silva',
+            empresa: 'Empresa de Fulano',
+            endereco: 'Rua dos Fulanos, 165',
+            pais: 'United States',
+            estado: 'California',
+            cidade: 'Los Angeles',
+            cep: '90001',
+            telefone: '+1 1234567890'
+        });
 
-        cy.get('#id_gender1').check();
+        cadastroPage.criarConta();
 
-        cy.get(':nth-child(1) > b').should('contain.text', 'Enter Account Information');
-
-        cy.get('[data-qa="password"]').type(password);
-
-        cy.get('[data-qa="days"]').select('5');
-
-        cy.get('[data-qa="months"]').select('7');
-
-        cy.get('[data-qa="years"]').select('1977');
-
-        cy.get('#newsletter').check();
-
-        cy.get('#optin').check();
-
-        cy.get('[data-qa="first_name"]').type('Fulano');
-
-        cy.get('[data-qa="last_name"]').type('da Silva');
-
-        cy.get('[data-qa="company"]').type('Empresa de Fulano');
-
-        cy.get('[data-qa="address"]').type('Rua dos Fulanos, 165');
-
-        cy.get('[data-qa="country"]').select('United States');
-
-        cy.get('[data-qa="state"]').type('California');
-
-        cy.get('[data-qa="city"]').type('Los Angeles');
-
-        cy.get('[data-qa="zipcode"]').type('90001');
-
-        cy.get('[data-qa="mobile_number"]').type('+1 1234567890');
-
-        cy.get('[data-qa="create-account"]').click();
-
-        cy.get('[data-qa="account-created"]', { timeout: 15000 })
+        cadastroPage.mensagemContaCriada
             .should('be.visible')
             .and('contain.text', 'Account Created!');
 
-        cy.get('[data-qa="continue-button"]').click();
+        cadastroPage.continuar();
 
         cy.contains('.shop-menu a', 'Logged in as Fulano da Silva', { timeout: 15000 })
             .should('be.visible');
@@ -213,15 +179,11 @@ describe('Testes e validações - Automation Exercises', () => {
 
         loginPage.acessarPeloMenu();
 
-        cy.get('.signup-form > h2').should('contain.text', 'New User Signup!');
+        cadastroPage.titulo.should('contain.text', 'New User Signup!');
 
-        cy.get('[data-qa="signup-name"]').type('PGATS');
+        cadastroPage.iniciarCadastro('PGATS', 'aut-pgats-008@test.com');
 
-        cy.get('[data-qa="signup-email"]').type('aut-pgats-008@test.com');
-
-        cy.get('[data-qa="signup-button"]').click();
-
-        cy.get('.signup-form > form > p').should('contain.text', 'Email Address already exist!');
+        cadastroPage.mensagemDeErro.should('contain.text', 'Email Address already exist!');
 
     });
 
@@ -232,7 +194,9 @@ describe('Testes e validações - Automation Exercises', () => {
 
         cy.get('a[href="/products"]').should('have.length', 1).click();
 
-        cy.contains('h2.title', 'All Products').should('be.visible');
+        cy.location('pathname', { timeout: 15000 }).should('eq', '/products');
+
+        cy.contains('h2.title', 'All Products', { timeout: 15000 }).should('be.visible');
 
         cy.get('.features_items').should('be.visible');
 
@@ -276,7 +240,9 @@ describe('Testes e validações - Automation Exercises', () => {
 
         cy.get('a[href="/products"]').should('have.length', 1).click();
 
-        cy.contains('h2.title', 'All Products').should('be.visible');
+        cy.location('pathname', { timeout: 15000 }).should('eq', '/products');
+
+        cy.contains('h2.title', 'All Products', { timeout: 15000 }).should('be.visible');
 
         cy.get('#search_product').type('Blue Top');
 
@@ -325,53 +291,36 @@ describe('Testes e validações - Automation Exercises', () => {
 
         loginPage.acessarPeloMenu();
 
-        cy.get('.signup-form > h2').should('contain.text', 'New User Signup!');
+        cadastroPage.titulo.should('contain.text', 'New User Signup!');
 
-        cy.get('[data-qa="signup-name"]').type('Cyclano da Silva');
+        cadastroPage.iniciarCadastro('Cyclano da Silva', `pgats-aut-+${Date.now()}@gmail.com`);
 
-        cy.get('[data-qa="signup-email"]').type(`pgats-aut-+${Date.now()}@gmail.com`);
+        cadastroPage.tituloInformacoes.should('be.visible');
 
-        cy.get('[data-qa="signup-button"]').click();
+        cadastroPage.preencherCadastro({
+            titulo: 'Mr',
+            senha: '1234567',
+            dia: '5',
+            mes: '7',
+            ano: '1977',
+            newsletter: true,
+            ofertas: true,
+            nome: 'Cyclano',
+            sobrenome: 'da Silva',
+            empresa: 'Empresa de Cyclano',
+            endereco: 'Rua dos Fulanos, 165',
+            pais: 'United States',
+            estado: 'California',
+            cidade: 'Los Angeles',
+            cep: '90001',
+            telefone: '+1 1234567890'
+        });
 
-        cy.get('#id_gender1').check();
+        cadastroPage.criarConta();
 
-        cy.get(':nth-child(1) > b').should('contain.text', 'Enter Account Information');
+        cadastroPage.mensagemContaCriada.should('be.visible').and('contain.text', 'Account Created!');
 
-        cy.get('[data-qa="password"]').type('1234567');
-
-        cy.get('[data-qa="days"]').select('5');
-
-        cy.get('[data-qa="months"]').select('7');
-
-        cy.get('[data-qa="years"]').select('1977');
-
-        cy.get('#newsletter').check();
-
-        cy.get('#optin').check();
-
-        cy.get('[data-qa="first_name"]').type('Cyclano');
-
-        cy.get('[data-qa="last_name"]').type('da Silva');
-
-        cy.get('[data-qa="company"]').type('Empresa de Cyclano');
-
-        cy.get('[data-qa="address"]').type('Rua dos Fulanos, 165');
-
-        cy.get('[data-qa="country"]').select('United States');
-
-        cy.get('[data-qa="state"]').type('California');
-
-        cy.get('[data-qa="city"]').type('Los Angeles');
-
-        cy.get('[data-qa="zipcode"]').type('90001');
-
-        cy.get('[data-qa="mobile_number"]').type('+1 1234567890');
-
-        cy.get('[data-qa="create-account"]').click();
-
-        cy.get('[data-qa="account-created"]', { timeout: 15000 }).should('be.visible').and('contain.text', 'Account Created!');
-
-        cy.get('[data-qa="continue-button"]').click();
+        cadastroPage.continuar();
 
         cy.contains('.shop-menu a', 'Logged in as Cyclano da Silva', { timeout: 15000 }).should('be.visible');
 
@@ -464,7 +413,7 @@ describe('Testes e validações - Automation Exercises', () => {
 
     });
 
-    it.only('Fazer pedido: Faça login antes de finalizar a compra', () => {
+    it('Fazer pedido: Faça login antes de finalizar a compra', () => {
 
         cy.visit('/');
 
@@ -484,7 +433,9 @@ describe('Testes e validações - Automation Exercises', () => {
 
         cy.get('a[href="/products"]').should('have.length', 1).click();
 
-        cy.contains('h2.title', 'All Products').should('be.visible');
+        cy.location('pathname', { timeout: 15000 }).should('eq', '/products');
+
+        cy.contains('h2.title', 'All Products', { timeout: 15000 }).should('be.visible');
 
         cy.get('.features_items').should('be.visible');
 

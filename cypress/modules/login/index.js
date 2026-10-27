@@ -22,7 +22,9 @@ export const loginPage = {
     },
 
     entrar() {
-        return cy.get('[data-qa="login-button"]').click();
+        cy.intercept('POST', '**/login').as('enviarLogin');
+        cy.get('[data-qa="login-button"]').click();
+        return cy.wait('@enviarLogin', { responseTimeout: 60000 });
     },
 
     sair() {
