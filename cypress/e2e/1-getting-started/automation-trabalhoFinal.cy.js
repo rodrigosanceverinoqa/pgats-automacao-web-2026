@@ -6,7 +6,6 @@ import { produtosPage } from '../../modules/produtos';
 import { carrinhoPage } from '../../modules/carrinho';
 import { pagamentoPage } from '../../modules/pagamento';
 
-
 describe('Testes e validações - Automation Exercises', () => {
     it('Cadastrar um novo usuário', () => {
 
@@ -106,7 +105,6 @@ describe('Testes e validações - Automation Exercises', () => {
             .should('be.visible');
 
         loginPage.sair();
-
 
         // realizar o login do usuário com e-mail e senha corretos
 
@@ -263,8 +261,6 @@ describe('Testes e validações - Automation Exercises', () => {
 
         cy.get('a > img').should('be.visible');
 
-        cy.get('#footer').scrollIntoView();
-
         cy.get('#footer').scrollIntoView().should('be.visible');
 
         cy.get('#footer').within(() => {
@@ -276,7 +272,6 @@ describe('Testes e validações - Automation Exercises', () => {
         cy.get('#subscribe').click();
 
         cy.get('#success-subscribe').should('be.visible').and('contain.text', 'You have been successfully subscribed!');
-
 
     });
 
@@ -326,8 +321,6 @@ describe('Testes e validações - Automation Exercises', () => {
         produtosPage.titulo.should('be.visible');
 
         produtosPage.lista.should('be.visible');
-
-        produtosPage.produtos.should('have.length.greaterThan', 0);
 
         produtosPage.produtos
             .should('have.length.at.least', 3);
@@ -413,8 +406,6 @@ describe('Testes e validações - Automation Exercises', () => {
         produtosPage.titulo.should('be.visible');
 
         produtosPage.lista.should('be.visible');
-
-        produtosPage.produtos.should('have.length.greaterThan', 0);
 
         produtosPage.produtos
             .should('have.length.at.least', 3);
